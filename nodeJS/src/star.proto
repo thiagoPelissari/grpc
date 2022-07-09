@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package starguide;
+
+
+service StarService{
+    rpc List (Empty) returns (StarList) {}
+    rpc Insert (NewItem) returns (StarItem) {}
+    rpc Find (StarItemId) returns (StarItem) {}
+}
+
+//Entities
+
+message Empty {}
+
+message StarItemId{
+    int32 id = 1;
+}
+
+message NewItem{
+    int32 id = 1;
+    string userHash = 2;
+    string name = 3;
+}
+
+message StarItem{
+    int32 id = 1;
+    string userHash = 2;
+    string name = 3;
+}
+
+message StarList{
+    repeated StarItem stars = 1;
+}
