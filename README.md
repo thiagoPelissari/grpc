@@ -68,6 +68,13 @@ python -m grpc_tools.protoc -I ../protobufs --python_out=. \
 ---
 ## REFERENCIAS
 
+
+`Geral`
+<br >
+Unary vs Stream (uni and bidirectional)
+https://grpc.io/docs/what-is-grpc/core-concepts/
+
+
 `NodeJS`
 <br >
 Tutorial 
@@ -83,6 +90,11 @@ https://github.com/grpc/grpc/blob/v1.46.3/examples/node/dynamic_codegen/route_gu
 
 Call from CLient
 https://github.com/grpc/grpc/blob/v1.46.3/examples/node/dynamic_codegen/route_guide/route_guide_client.js
+
+Streams
+https://blog.lsantos.dev/o-guia-do-grpc-4/
+<br>
+https://adityasridhar.com/posts/how-to-effectively-use-grpc-streams-in-nodejs
 
 `Python`
 <br >
