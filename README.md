@@ -37,7 +37,7 @@ pip install requirements.txt
 <br />
 
 ```shell script
-python star_server.py
+python grpc_server.py
 ```
 
 `===CLIENT====`
@@ -58,8 +58,7 @@ python XPTO
 3 Entrar na pasta python > gprc pelo terminalrodar e rodar o código abaixo. Após isso os arquivos deletados acima serão recriadas
 
 ```shell script
-python -m grpc_tools.protoc -I ../protobufs --python_out=. \
-         --grpc_python_out=. ../protobufs/star.proto
+python -m grpc_tools.protoc -I ../protobufs --python_out=. --grpc_python_out=. ../protobufs/user.proto  
 ```
 
 

@@ -5,11 +5,11 @@ package starguide;
 
 service StarService{
     rpc List (Empty) returns (StarList) {}
+    rpc Insert (NewItem) returns (StarItem) {}
+    rpc Find (StarItemId) returns (StarItem) {}
     rpc ListStreamServer (Empty) returns (stream StarItem) {}
     rpc ListStreamClient (stream StarItemId) returns (StarList) {}
     rpc ListStreamBidirectional (stream StarItemId) returns (stream StarItem) {}
-    rpc Insert (NewItem) returns (StarItem) {}
-    rpc Find (StarItemId) returns (StarItem) {}
 }
 
 //Entities
