@@ -1,10 +1,7 @@
 from asyncio.log import logger
 import time
-from grpc import server
-
 from concurrent import futures
 import grpc
-
 from user_pb2 import UserList, UserItem
 import user_pb2_grpc
 
@@ -15,17 +12,17 @@ fakeData = [
     UserItem(id=4, userHash="22d65d5661536cdc75c1fdf", name="User 4")
 ]
 
+
 class GrpcService(user_pb2_grpc.UserServiceServicer):
     def Find(self, request, context):
         user = [x for x in fakeData if x.id == request.id]
         return user[0]
-        
 
     def Insert(self, request, context):
-        user = UserItem(id=len(fakeData) + 1, name=request.name, userHash=request.userHash)
+        user = UserItem(id=len(fakeData) + 1, name=request.name,
+                        userHash=request.userHash)
         fakeData.append(user)
         return user
-
 
     def Delete(self, request, context):
         user = [x for x in fakeData if x.id == request.id]
@@ -42,11 +39,11 @@ class GrpcService(user_pb2_grpc.UserServiceServicer):
         for user in fakeData:
             time.sleep(2)
             yield user
-    
+
     def ListStreamClient(self, request, context):
         for user in request:
-            print(user)
-        return UserList(users=fakeData)
+            print(user.id)
+        return UserList(users=[x for x in fakeData if x.id == user.id])
 
     def ListStreamBidirectional(self, request, context):
         for user in request:
@@ -54,7 +51,6 @@ class GrpcService(user_pb2_grpc.UserServiceServicer):
             user = [x for x in fakeData if x.id == user.id]
             print(user[0])
             yield user[0]
-        
 
 
 def server_start():

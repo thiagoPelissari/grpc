@@ -24,9 +24,11 @@ node src/client.js
 
 ---
 
-## PYTHON
+## PYTHON `versão: 3.10.0`
 ### Como rodar ?
 Entre na pasta python e rode os comandos abaixo
+<br />
+
 
 `Dependencias`
 ```shell script
