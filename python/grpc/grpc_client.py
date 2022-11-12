@@ -40,13 +40,29 @@ def list_users_stream_client():
     stub = user_pb2_grpc.UserServiceStub(channel)
     def get_users():
         for i in range(1, 5):
-            yield user_pb2.UserItem(id=i)
+            user = user_pb2.UserItem(id=i)
+            print(f'processando {user}')
+            yield user
             time.sleep(1)
     
     # Return the last user processed
     response = stub.ListStreamClient(iter(get_users()))
     print(response)
 
+def list_users_stream_bidirectional():
+    channel = grpc.insecure_channel('localhost:50051')
+    stub = user_pb2_grpc.UserServiceStub(channel)
+    def get_users():
+        for i in range(1, 5):
+            user = user_pb2.UserItem(id=i)
+            print(f'processando {user}')
+            yield user
+            time.sleep(1)
+    
+    # Return the last user processed
+    response = stub.ListStreamBidirectional(iter(get_users()))
+    for user in response:
+        print(user)
    
         
         
@@ -57,7 +73,8 @@ def run():
     # insert_user()
     # delete_user()
     # list_users_stream_server()
-    list_users_stream_client()
+    # list_users_stream_client()
+    # list_users_stream_bidirectional()
 
 
 

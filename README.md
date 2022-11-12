@@ -45,7 +45,7 @@ python grpc_server.py
 `===CLIENT====`
 <br />
 ```shell script
-python XPTO
+python grpc_client.py
 ```
 
 
