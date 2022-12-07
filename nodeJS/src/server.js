@@ -1,4 +1,4 @@
-var PROTO_PATH = __dirname + '/star.proto';
+var PROTO_PATH = __dirname + '/user.proto';
 var grpc = require('@grpc/grpc-js');
 var protoLoader = require('@grpc/proto-loader');
 // Suggested options for similarity to existing grpc.load behavior
@@ -12,7 +12,7 @@ var packageDefinition = protoLoader.loadSync(
     });
 var protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 // The protoDescriptor object has the full package hierarchy
-var starguide = protoDescriptor.starguide;
+var userguide = protoDescriptor.userguide;
 const server = new grpc.Server();
 
 
@@ -32,7 +32,7 @@ function changeData(id, userHash, name) {
     return data;
 }
 
-function getStar(call, callback){
+function getUser(call, callback){
     console.log("Unary Request")
     const data = fakeData.find(item => item.id === call.request.id);
     if (data) {
@@ -46,7 +46,7 @@ function getStar(call, callback){
 //ao invés de dois parâmetros de uma chamada unária, uma stream server somente leva um único parâmetro, que vamos chamar de cal
 //O objeto call é uma implementação de uma stream de escrita juntamente com o registro da chamada, portanto, se tivéssemos algum tipo de parâmetro para ser enviado, 
 //poderíamos obte-los através de call.request.parametro
-async function listStarStreamServer(call) { 
+async function listUserStreamServer(call) { 
     const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
     for (const fake of fakeData) {
         await snooze(1000);
@@ -57,29 +57,29 @@ async function listStarStreamServer(call) {
 
 
 //Client Grcp must return callback function
-function listStarStreamClient(call, callback){
+function listUserStreamClient(call, callback){
     const result = [];
     console.log("Client Stream Request")
 
-    call.on('data',function(star){
-        dataSearched = fakeData.find(item => item.id === star.id);
+    call.on('data',function(user){
+        dataSearched = fakeData.find(item => item.id === user.id);
         if (dataSearched != null) {
             result.push(dataSearched);
         }
         //else
     });
     call.on('end',function(){
-        callback(null,{"stars" : result}); //This stars came from star.proto Starlist > StarItem);
+        callback(null,{"users" : result}); //This users came from user.proto Userlist > UserItem);
     })
 }
 
 //Bidirectional or duplex stream, must return call.write and call.end
-async function listStarStreamDuplex(call) { 
+async function listUserStreamDuplex(call) { 
     const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
     let result = [];
-    call.on('data', async function(star){
-        await snooze(5000);
-        dataSearched = fakeData.find(item => item.id === star.id);
+    call.on('data', async function(user){
+        await snooze(3000);
+        dataSearched = fakeData.find(item => item.id === user.id);
         if (dataSearched != null) {
             result = dataSearched;
         }
@@ -91,18 +91,18 @@ async function listStarStreamDuplex(call) {
     })
 }
 
-function listStar(_, callback) { 
-    callback(null, {"stars" : fakeData}); //This stars came from star.proto Starlist > StarItem
+function listUser(_, callback) { 
+    callback(null, {"users" : fakeData}); //This users came from user.proto Userlist > UserItem
 }
 
 
-function insertStar(call, callback){
+function insertUser(call, callback){
     const data = {id: fakeData.length + 1, userHash: call.request.userHash, name:call.request.name};
     if (data) fakeData.push(data);
     callback(null, data);
 }
 
-function updateStar(call, callback){
+function updateUser(call, callback){
     const data = changeData(call.request.id, call.request.userHash, call.request.name);
     if (data) {
         callback(null, data);
@@ -114,13 +114,13 @@ function updateStar(call, callback){
 
 function getServer() {
     var server = new grpc.Server();
-    server.addService(starguide.StarService.service, {
-      Find: getStar,
-      List: listStar,
-      ListStreamServer: listStarStreamServer, 
-      ListStreamClient: listStarStreamClient,
-      ListStreamBidirectional: listStarStreamDuplex,
-      Insert: insertStar,
+    server.addService(userguide.UserService.service, {
+      Find: getUser,
+      List: listUser,
+      Insert: insertUser,
+      ListStreamServer: listUserStreamServer, 
+      ListStreamClient: listUserStreamClient,
+      ListStreamBidirectional: listUserStreamDuplex,
     });
     return server;
 }

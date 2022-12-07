@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package userguide;
+
+
+service UserService{
+    rpc List (Empty) returns (UserList) {}
+    rpc Insert (NewItem) returns (UserItem) {}
+    rpc Find (UserItemId) returns (UserItem) {}
+    rpc ListStreamServer (Empty) returns (stream UserItem) {}
+    rpc ListStreamClient (stream UserItemId) returns (UserList) {}
+    rpc ListStreamBidirectional (stream UserItemId) returns (stream UserItem) {}
+}
+
+//Entities
+
+message Empty {}
+
+message UserItemId{
+    int32 id = 1;
+}
+
+message NewItem{
+    int32 id = 1;
+    string userHash = 2;
+    string name = 3;
+}
+
+message UserItem{
+    int32 id = 1;
+    string userHash = 2;
+    string name = 3;
+}
+
+message UserList{
+    repeated UserItem users = 1;
+}
