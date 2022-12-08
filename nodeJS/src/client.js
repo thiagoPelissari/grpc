@@ -65,11 +65,14 @@ var call = client.ListStreamServer({});
 const call2 = client.ListStreamClient((err, response) => {
     if (err) throw err
     console.log(response)
-    console.log(chalk.blue("Testing grpc ListUserClientStream END"));
 })
 
 call2.on('data', function(feature) {
     console.log(chalk.green(('Client Stream: ' + feature.name)));
+});
+
+call2.on('end', function(feature) {
+  console.log(chalk.blue("Testing grpc ListUserClientStream END"));
 });
 
 call2.write({ id: 1 })
@@ -87,9 +90,9 @@ call3.on('data', async function(feature) {
   count++;
   console.log(chalk.green(('Bidirectional Stream: ' + feature.name)));
   await snooze(4000);
-  if(count == 4){//4 baseado no numero de writes abaixo
-    call3.end()//Se não fexar o stream, o servidor não termina a chamada e o terminal fica travado
-}
+  // if(count == 4){//4 baseado no numero de writes abaixo
+  call3.end()//Se não fexar o stream, o servidor não termina a chamada e o terminal fica travado
+//}
 });
 call3.on('end', function() {
   // The server has finished sending
